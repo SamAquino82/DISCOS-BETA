@@ -22,38 +22,50 @@ namespace proyecto_beta_discos
         List<Discos> discos = new List<Discos>();
         private void Form1_Load(object sender, EventArgs e)
         {
-            NegocioDiscos negocio = new NegocioDiscos();
-            discos = negocio.listar();
-            dgv1.DataSource = discos;
-            dgv1.Columns["Imagen"].Visible = false;
-            
+            refresh();
+        }
+        private void refresh()
+        {
+            try
+            {
+                NegocioDiscos negocio = new NegocioDiscos();
+                discos = negocio.listar();
+                dgv1.DataSource = discos;
+                dgv1.Columns["Imagen"].Visible = false;
 
+            }
+            catch (Exception ex)
+            {
 
+                MessageBox.Show(ex.ToString());
+                Close();
+            }
         }
 
         private void dgv1_SelectionChanged(object sender, EventArgs e)
         {
             Discos seleccionado = (Discos)dgv1.CurrentRow.DataBoundItem;
-            cargarimagen(seleccionado);
+            cargarimagen(seleccionado.imagen);
         }
 
         private void btnagregar_Click(object sender, EventArgs e)
         {
             frmaltadisco alta = new frmaltadisco();
             alta.ShowDialog();
+            refresh();
         }
 
-        public void cargarimagen(Discos disc)
+        public void cargarimagen(string imagen)
         {
             try
             {
-                pictureBox1.Load(disc.imagen);
+                pbxDiscos.Load(imagen);
             }
             catch (Exception)
             {
-                if (disc.imagen =="")
+                if (imagen == null || imagen == "")
                 {
-                    pictureBox1.Load("https://img.freepik.com/vector-premium/icono-marco-fotos-foto-vacia-blanco-vector-sobre-fondo-transparente-aislado-eps-10_399089-1290.jpg");
+                    pbxDiscos.Load("https://img.freepik.com/vector-premium/icono-marco-fotos-foto-vacia-blanco-vector-sobre-fondo-transparente-aislado-eps-10_399089-1290.jpg");
 
                 }
                

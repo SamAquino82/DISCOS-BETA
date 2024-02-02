@@ -65,5 +65,26 @@ namespace proyecto_beta_discos
                 MessageBox.Show(ex.ToString());
             }
         }
+
+        private void txtUrl_Leave(object sender, EventArgs e)
+        {
+            cargarimagen(txtUrl.Text);
+        }
+        private void cargarimagen(string imagen)
+        {
+            try
+            {
+                pbxDiscos.Load(imagen);
+            }
+            catch (Exception)
+            {
+                if (imagen == null || imagen == "")
+                {
+                    pbxDiscos.Load("https://img.freepik.com/vector-premium/icono-marco-fotos-foto-vacia-blanco-vector-sobre-fondo-transparente-aislado-eps-10_399089-1290.jpg");
+
+                }
+
+            }
+        }
     }
 }
