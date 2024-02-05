@@ -32,6 +32,7 @@ namespace proyecto_beta_discos
                 discos = negocio.listar();
                 dgv1.DataSource = discos;
                 dgv1.Columns["Imagen"].Visible = false;
+                dgv1.Columns["Id"].Visible = false;
 
             }
             catch (Exception ex)
@@ -70,6 +71,16 @@ namespace proyecto_beta_discos
                 }
                
             }
+        }
+
+        private void btnmodificar_Click(object sender, EventArgs e)
+        {
+            Discos seleccionado=new Discos();
+            seleccionado = (Discos)dgv1.CurrentRow.DataBoundItem;
+            frmaltadisco alta = new frmaltadisco(seleccionado);
+            alta.ShowDialog();
+            refresh();
+
         }
     }
 }

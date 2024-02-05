@@ -9,6 +9,7 @@ namespace Dominio
 {
     public class Discos
     {
+        public int id { get; set; }
         public string Nombre { get; set; }
         public Formato Form { get; set; }
         public Estilo Tipo { get; set; }

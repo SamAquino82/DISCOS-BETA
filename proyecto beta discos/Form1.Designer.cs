@@ -31,6 +31,7 @@
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.pbxDiscos = new System.Windows.Forms.PictureBox();
             this.btnagregar = new System.Windows.Forms.Button();
+            this.btnmodificar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxDiscos)).BeginInit();
             this.SuspendLayout();
@@ -69,11 +70,22 @@
             this.btnagregar.UseVisualStyleBackColor = true;
             this.btnagregar.Click += new System.EventHandler(this.btnagregar_Click);
             // 
+            // btnmodificar
+            // 
+            this.btnmodificar.Location = new System.Drawing.Point(157, 418);
+            this.btnmodificar.Name = "btnmodificar";
+            this.btnmodificar.Size = new System.Drawing.Size(119, 47);
+            this.btnmodificar.TabIndex = 3;
+            this.btnmodificar.Text = "Modificar";
+            this.btnmodificar.UseVisualStyleBackColor = true;
+            this.btnmodificar.Click += new System.EventHandler(this.btnmodificar_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.btnmodificar);
             this.Controls.Add(this.btnagregar);
             this.Controls.Add(this.pbxDiscos);
             this.Controls.Add(this.dgv1);
@@ -93,6 +105,7 @@
         private System.Windows.Forms.DataGridView dgv1;
         private System.Windows.Forms.PictureBox pbxDiscos;
         private System.Windows.Forms.Button btnagregar;
+        private System.Windows.Forms.Button btnmodificar;
     }
 }
 

@@ -25,7 +25,7 @@ namespace negocio
             {
                 conexion.ConnectionString = "server=.\\SQLEXPRESS08; database=DISCOS_DB; integrated security=true";
                 comando.CommandType=System.Data.CommandType.Text;
-                comando.CommandText = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato from DISCOS, ESTILOS E, TIPOSEDICION T where IdEstilo=e.Id and IdTipoEdicion=t.Id";
+                comando.CommandText = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id";
                 comando.Connection = conexion;
 
                 conexion.Open();
@@ -41,11 +41,13 @@ namespace negocio
                     {
                         aux.imagen = (string)lector["UrlImagenTapa"];
                     }
-                   
+                    aux.id = (int)lector["Id"];
                     aux.Tipo = new Estilo();
                     aux.Tipo.descripcion = (string)lector["Tipo"];
                     aux.Form = new Formato();
                     aux.Form.TipoDisc = (string)lector["Formato"];
+                    aux.Tipo.id = (int)lector["IdEstilo"];
+                    aux.Form.id = (int)lector["IdTipoEdicion"];
 
                     listadiscos.Add(aux);
 
@@ -81,5 +83,30 @@ namespace negocio
                 datos.cerrarconexion();
             }
         }
+
+        public void modificar(Discos discos)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setconsulta("update DISCOS set Titulo=@Nombre,FechaLanzamiento=@Lanzamiento,CantidadCanciones=@Ventas,UrlImagenTapa=@Imagen,IdEstilo=@IdEstilo,IdTipoEdicion=@IdFormato where Id=@Id");
+                datos.setparametros("@Nombre", discos.Nombre);
+                datos.setparametros("@Lanzamiento", discos.lanzamiento);
+                datos.setparametros("@Ventas", discos.ventas);
+                datos.setparametros("@Imagen", discos.imagen);
+                datos.setparametros("@IdEstilo", discos.Tipo.id);
+                datos.setparametros("@IdFormato", discos.Form.id);
+                datos.setparametros("@Id", discos.id);
+                datos.ejecutaraccion();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally { datos.cerrarconexion();}
+
+        }
     }
+
 }
