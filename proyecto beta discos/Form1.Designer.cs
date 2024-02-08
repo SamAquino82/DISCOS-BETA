@@ -32,6 +32,7 @@
             this.pbxDiscos = new System.Windows.Forms.PictureBox();
             this.btnagregar = new System.Windows.Forms.Button();
             this.btnmodificar = new System.Windows.Forms.Button();
+            this.btneliminarfisica = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxDiscos)).BeginInit();
             this.SuspendLayout();
@@ -72,7 +73,7 @@
             // 
             // btnmodificar
             // 
-            this.btnmodificar.Location = new System.Drawing.Point(157, 418);
+            this.btnmodificar.Location = new System.Drawing.Point(135, 418);
             this.btnmodificar.Name = "btnmodificar";
             this.btnmodificar.Size = new System.Drawing.Size(119, 47);
             this.btnmodificar.TabIndex = 3;
@@ -80,11 +81,22 @@
             this.btnmodificar.UseVisualStyleBackColor = true;
             this.btnmodificar.Click += new System.EventHandler(this.btnmodificar_Click);
             // 
+            // btneliminarfisica
+            // 
+            this.btneliminarfisica.Location = new System.Drawing.Point(273, 418);
+            this.btneliminarfisica.Name = "btneliminarfisica";
+            this.btneliminarfisica.Size = new System.Drawing.Size(121, 47);
+            this.btneliminarfisica.TabIndex = 4;
+            this.btneliminarfisica.Text = "Eliminar";
+            this.btneliminarfisica.UseVisualStyleBackColor = true;
+            this.btneliminarfisica.Click += new System.EventHandler(this.btneliminarfisica_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.btneliminarfisica);
             this.Controls.Add(this.btnmodificar);
             this.Controls.Add(this.btnagregar);
             this.Controls.Add(this.pbxDiscos);
@@ -106,6 +118,7 @@
         private System.Windows.Forms.PictureBox pbxDiscos;
         private System.Windows.Forms.Button btnagregar;
         private System.Windows.Forms.Button btnmodificar;
+        private System.Windows.Forms.Button btneliminarfisica;
     }
 }
 

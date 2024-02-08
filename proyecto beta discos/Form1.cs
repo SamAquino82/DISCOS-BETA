@@ -82,5 +82,28 @@ namespace proyecto_beta_discos
             refresh();
 
         }
+
+        private void btneliminarfisica_Click(object sender, EventArgs e)
+        {
+            try
+            { 
+                NegocioDiscos negocio = new NegocioDiscos();
+                Discos seleccionado = new Discos();
+                seleccionado = (Discos)dgv1.CurrentRow.DataBoundItem;
+                DialogResult resultado= MessageBox.Show("Estas seguro de eliminar el Disco" + seleccionado.Nombre.ToString(), "Eliminando",MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
+                if(resultado == DialogResult.Yes)
+                {
+                negocio.eliminar(seleccionado);
+                refresh();
+
+                }
+                
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
+        }
     }
 }
