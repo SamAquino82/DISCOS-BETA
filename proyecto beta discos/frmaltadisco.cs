@@ -46,11 +46,12 @@ namespace proyecto_beta_discos
                 disco.ventas = int.Parse(txtventas.Text);
                 disco.Tipo= (Estilo)cboestilo.SelectedItem;
                 disco.Form=(Formato)cboformato.SelectedItem;
+                disco.imagen=txtUrl.Text;
 
                 if(disco.id!=0) {
                  negocio.modificar(disco);
                 MessageBox.Show("modificado exitosamente");
-                }
+                }   
                 else
                 {
                 negocio.agregar(disco);

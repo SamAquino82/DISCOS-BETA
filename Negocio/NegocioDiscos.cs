@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Dominio;
 using Negocio;
-
-
-
+using System.Security.Cryptography.X509Certificates;
 
 namespace negocio
 {
@@ -25,7 +23,7 @@ namespace negocio
             {
                 conexion.ConnectionString = "server=.\\SQLEXPRESS08; database=DISCOS_DB; integrated security=true";
                 comando.CommandType=System.Data.CommandType.Text;
-                comando.CommandText = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id";
+                comando.CommandText = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id AND Activo=1";
                 comando.Connection = conexion;
 
                 conexion.Open();
@@ -68,7 +66,7 @@ namespace negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setconsulta("INSERT INTO DISCOS(Titulo, FechaLanzamiento, CantidadCanciones, IdEstilo, IdTipoEdicion) VALUES ('" + disco.Nombre + "', '" + disco.lanzamiento.ToString("yyyy-MM-dd") + "', " + disco.ventas + ", @IdEstilo, @IdTipoEdicion)");
+                datos.setconsulta("INSERT INTO DISCOS(Titulo, FechaLanzamiento, CantidadCanciones, IdEstilo, IdTipoEdicion,Activo) VALUES ('" + disco.Nombre + "', '" + disco.lanzamiento.ToString("yyyy-MM-dd") + "', " + disco.ventas + ", @IdEstilo, @IdTipoEdicion,1)");
                 datos.setparametros("@IdEstilo",disco.Tipo.id);
                 datos.setparametros("@IdTipoEdicion",disco.Form.id);
                 datos.ejecutaraccion();
@@ -123,6 +121,23 @@ namespace negocio
             {
 
                 throw;
+            }
+            
+        }
+        public void eliminarlogica(int id)
+        {
+            try
+            {
+                AccesoDatos datos = new AccesoDatos();
+                datos.setconsulta("update DISCOS set Activo=0 WHERE Id=@Id");
+                datos.setparametros("@Id", id);
+                datos.ejecutaraccion();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

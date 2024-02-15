@@ -16,5 +16,7 @@ namespace Dominio
         public  int ventas{ get; set; }
         public  string imagen { get; set; }
         public DateTime lanzamiento { get; set; }
+
+        public bool Activo { get; set; }
     }
 }

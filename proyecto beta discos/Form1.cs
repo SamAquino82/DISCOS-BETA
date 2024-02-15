@@ -30,9 +30,11 @@ namespace proyecto_beta_discos
             {
                 NegocioDiscos negocio = new NegocioDiscos();
                 discos = negocio.listar();
-                dgv1.DataSource = discos;
+               dgv1.DataSource = discos;
                 dgv1.Columns["Imagen"].Visible = false;
                 dgv1.Columns["Id"].Visible = false;
+                dgv1.Columns["Activo"].Visible=false;
+                
 
             }
             catch (Exception ex)
@@ -45,8 +47,13 @@ namespace proyecto_beta_discos
 
         private void dgv1_SelectionChanged(object sender, EventArgs e)
         {
-            Discos seleccionado = (Discos)dgv1.CurrentRow.DataBoundItem;
-            cargarimagen(seleccionado.imagen);
+            if (dgv1 != null)
+            {
+                Discos seleccionado = (Discos)dgv1.CurrentRow.DataBoundItem;
+                cargarimagen(seleccionado.imagen);
+
+            }
+           
         }
 
         private void btnagregar_Click(object sender, EventArgs e)
@@ -85,25 +92,65 @@ namespace proyecto_beta_discos
 
         private void btneliminarfisica_Click(object sender, EventArgs e)
         {
+            eliminar();
+        }
+        private void btneliminarlogico_Click(object sender, EventArgs e)
+        {
+            eliminar(true);
+        }
+
+        public void eliminar(bool logica = false)
+        {
             try
-            { 
+            {
                 NegocioDiscos negocio = new NegocioDiscos();
                 Discos seleccionado = new Discos();
                 seleccionado = (Discos)dgv1.CurrentRow.DataBoundItem;
-                DialogResult resultado= MessageBox.Show("Estas seguro de eliminar el Disco" + seleccionado.Nombre.ToString(), "Eliminando",MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
-                if(resultado == DialogResult.Yes)
+                DialogResult resultado = MessageBox.Show("Estas seguro de eliminar el Disco" + seleccionado.Nombre.ToString(), "Eliminando", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (resultado == DialogResult.Yes)
                 {
-                negocio.eliminar(seleccionado);
-                refresh();
+                    if (logica) {
+                        negocio.eliminarlogica(seleccionado.id);
+                    }
+                    else 
+                    {
+                        negocio.eliminar(seleccionado);
+                    }
+
+                    refresh();
 
                 }
-                
+
             }
             catch (Exception ex)
             {
 
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void txtfiltrar_TextChanged(object sender, EventArgs e)
+        {
+            List<Discos> listafiltrada;
+            string filtrar = txtfiltrar.Text;
+            if (filtrar != "")
+            {
+                listafiltrada = discos.FindAll(x => x.Nombre.ToUpper().Contains(filtrar.ToUpper()));
+
+            }
+            else
+            {
+                listafiltrada = discos;
+
+            }
+
+            dgv1.DataSource = null;
+            dgv1.DataSource = listafiltrada;
         }
     }
 }
