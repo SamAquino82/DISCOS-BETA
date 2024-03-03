@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using Dominio;
+using negocio;
 
 namespace Negocio
 {
@@ -54,9 +55,9 @@ namespace Negocio
                 conexion.Open();
                 lector = comando.ExecuteReader();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -72,5 +73,9 @@ namespace Negocio
             conexion.Close();
             
         }
+     
+      
+         
+
     }
 }

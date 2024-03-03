@@ -15,43 +15,33 @@ namespace negocio
         public List<Discos> listar()
         {
             List<Discos>listadiscos = new List<Discos>();
-            SqlConnection conexion = new SqlConnection();
-            SqlCommand comando = new SqlCommand();
-            SqlDataReader lector;
-
+            AccesoDatos datos = new AccesoDatos();
             try
             {
-                conexion.ConnectionString = "server=.\\SQLEXPRESS08; database=DISCOS_DB; integrated security=true";
-                comando.CommandType=System.Data.CommandType.Text;
-                comando.CommandText = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id AND Activo=1";
-                comando.Connection = conexion;
-
-                conexion.Open();
-                lector= comando.ExecuteReader();
-                while (lector.Read())
+                datos.setconsulta("select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id and Activo=1");
+                datos.ejecutarlectura();
+                while (datos.Lector.Read())
                 {
                     Discos aux = new Discos();
-                    aux.Nombre = (string)lector["Titulo"];
-                    aux.lanzamiento = (DateTime)lector["FechaLanzamiento"];
-                    aux.ventas = (int)lector["CantidadCanciones"];
+                    aux.Nombre = (string)datos.Lector["Titulo"];
+                    aux.lanzamiento = (DateTime)datos.Lector["FechaLanzamiento"];
+                    aux.ventas = (int)datos.Lector["CantidadCanciones"];
 
-                    if (!(lector["UrlImagenTapa"] is DBNull))
+                    if (!(datos.Lector["UrlImagenTapa"] is DBNull))
                     {
-                        aux.imagen = (string)lector["UrlImagenTapa"];
+                        aux.imagen = (string)datos.Lector["UrlImagenTapa"];
                     }
-                    aux.id = (int)lector["Id"];
+                    aux.id = (int)datos.Lector["Id"];
                     aux.Tipo = new Estilo();
-                    aux.Tipo.descripcion = (string)lector["Tipo"];
+                    aux.Tipo.descripcion = (string)datos.Lector["Tipo"];
                     aux.Form = new Formato();
-                    aux.Form.TipoDisc = (string)lector["Formato"];
-                    aux.Tipo.id = (int)lector["IdEstilo"];
-                    aux.Form.id = (int)lector["IdTipoEdicion"];
-
+                    aux.Form.TipoDisc = (string)datos.Lector["Formato"];
+                    aux.Tipo.id = (int)datos.Lector["IdEstilo"];
+                    aux.Form.id = (int)datos.Lector["IdTipoEdicion"];
+                    
                     listadiscos.Add(aux);
-
-
                 }
-                conexion.Close();
+                datos.cerrarconexion();
                 return listadiscos;
             }
             catch (Exception)
@@ -138,6 +128,107 @@ namespace negocio
             {
 
                 throw ex;
+            }
+        }
+
+        public List<Discos> filtrar(string campo, string criterio, string filtro)
+        {
+            List<Discos > lista = new List<Discos >();
+            AccesoDatos datos=new AccesoDatos();
+            try
+            {
+                string consulta = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id and Activo=1 and ";
+                if ( filtro!="")
+                {
+                    switch (campo)
+                    {
+                        case "Numero":
+                            switch (criterio)
+                            {
+                                case "Mayor a":
+                                    consulta += " D.Id > " + filtro;
+                                    break;
+                                case "Menor a":
+                                    consulta += "D.Id < " + filtro;
+                                    break;
+                                case "Igual a":
+                                    consulta += "D.Id= " + filtro;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case "Nombre":
+                            switch (criterio)
+                            {
+                                case "Comienza con":
+                                    consulta += "Titulo LIKE '" + filtro + "%' ";
+                                    break;
+                                case "Termina con":
+                                    consulta += "Titulo LIKE '%" + filtro + "'";
+                                    break;
+                                case "Contiene a":
+                                    consulta += "Titulo LIKE '%" + filtro + "%'";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case "Descripcion":
+                            switch (criterio)
+                            {
+                                case "Comienza con":
+                                    consulta += "E.Descripcion  LIKE '" + filtro + "%'";
+                                    break;
+                                case "Termina con":
+                                    consulta += "E.Descripcion  LIKE '%" + filtro + "'";
+                                    break;
+                                case "Contiene a":
+                                    consulta += "E.Descripcion  LIKE '%" + filtro + "%'";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        default: break;
+
+                    }
+                }
+                else
+                {
+                    NegocioDiscos negocio = new NegocioDiscos();
+                    consulta = "select Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, E.Descripcion Tipo, t.Descripcion Formato, D.IdEstilo,D.IdTipoEdicion,D.Id from DISCOS D, ESTILOS E, TIPOSEDICION T where IdEstilo = e.Id and IdTipoEdicion = t.Id and Activo=1 ";
+
+                }
+                datos.setconsulta(consulta);
+                datos.ejecutarlectura();
+                while (datos.Lector.Read())
+                {
+                    Discos aux = new Discos();
+                    aux.Nombre = (string)datos.Lector["Titulo"];
+                    aux.lanzamiento = (DateTime)datos.Lector["FechaLanzamiento"];
+                    aux.ventas = (int)datos.Lector["CantidadCanciones"];
+
+                    if (!(datos.Lector["UrlImagenTapa"] is DBNull))
+                    {
+                        aux.imagen = (string)datos.Lector["UrlImagenTapa"];
+                    }
+                    aux.id = (int)datos.Lector["Id"];
+                    aux.Tipo = new Estilo();
+                    aux.Tipo.descripcion = (string)datos.Lector["Tipo"];
+                    aux.Form = new Formato();
+                    aux.Form.TipoDisc = (string)datos.Lector["Formato"];
+                    aux.Tipo.id = (int)datos.Lector["IdEstilo"];
+                    aux.Form.id = (int)datos.Lector["IdTipoEdicion"];
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }
